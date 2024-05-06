@@ -5,6 +5,8 @@ import com.paccy.hibernate.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.List;
+
 public class StudentDao {
 
     public void  saveStudent(Student student){
@@ -74,5 +76,30 @@ public class StudentDao {
             }
         }
         return  student;
+    }
+
+
+//    Getting all students
+
+    public List<Student>  getStudents(){
+        Transaction transaction = null;
+        List<Student> students =null;
+        try (Session session= HibernateUtil.getSessionFactory().openSession()){
+//            Start transaction
+            transaction= session.beginTransaction();
+
+//            get student object
+            students= session.createQuery("from Student ").list();
+
+//            Commit the transaction
+
+            transaction.commit();
+        }
+        catch (Exception e){
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
+        return  students;
     }
 }
