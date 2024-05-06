@@ -102,4 +102,29 @@ public class StudentDao {
         }
         return  students;
     }
+
+//    Deleting a student
+
+    public void   deleteStudent(long id){
+        Transaction transaction = null;
+        Student student =null;
+        try (Session session= HibernateUtil.getSessionFactory().openSession()){
+//            Start transaction
+            transaction= session.beginTransaction();
+
+//            get student object
+            student= session.get(Student.class,id);
+
+            session.delete(student);
+
+//            Commit the transaction
+
+            transaction.commit();
+        }
+        catch (Exception e){
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
+    }
 }
