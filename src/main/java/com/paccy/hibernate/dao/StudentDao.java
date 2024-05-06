@@ -28,4 +28,51 @@ public class StudentDao {
         }
     }
 
+
+//    Updating student
+
+    public void  updateStudent(Student student){
+        Transaction transaction = null;
+        try (Session session= HibernateUtil.getSessionFactory().openSession()){
+//            Start transaction
+            transaction= session.beginTransaction();
+
+//            Save student
+            session.saveOrUpdate(student);
+//            Commit the transaction
+
+            transaction.commit();
+
+
+        }
+        catch (Exception e){
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
+    }
+
+//    Getting student by id
+
+    public Student  getStudentById(long id){
+        Transaction transaction = null;
+        Student student = null;
+        try (Session session= HibernateUtil.getSessionFactory().openSession()){
+//            Start transaction
+            transaction= session.beginTransaction();
+
+//            get student object
+            student= session.get(Student.class,id);
+
+//            Commit the transaction
+
+            transaction.commit();
+        }
+        catch (Exception e){
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
+        return  student;
+    }
 }
